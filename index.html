@@ -58,66 +58,13 @@
       gap:15px;
     }
 
-    .card{
+    .empty{
       background:#13131a;
       border:1px solid #26263a;
       border-radius:18px;
-      padding:18px;
-      transition:0.2s;
-    }
-
-    .card:hover{
-      transform:scale(1.01);
-      border-color:#7d4dff;
-    }
-
-    .title{
-      font-size:20px;
-      font-weight:bold;
-      color:#b78cff;
-    }
-
-    .game{
-      margin-top:5px;
+      padding:30px;
+      text-align:center;
       color:#8f8fa3;
-      font-size:14px;
-    }
-
-    .desc{
-      margin-top:12px;
-      line-height:1.5;
-      color:#d1d1dc;
-    }
-
-    .buttons{
-      display:flex;
-      gap:10px;
-      margin-top:18px;
-    }
-
-    button{
-      flex:1;
-      border:none;
-      padding:12px;
-      border-radius:12px;
-      cursor:pointer;
-      font-weight:bold;
-      transition:0.2s;
-    }
-
-    .copy{
-      background:#7d4dff;
-      color:white;
-    }
-
-    .video{
-      background:#1f1f2e;
-      color:white;
-      border:1px solid #31314d;
-    }
-
-    button:hover{
-      opacity:0.9;
     }
 
     .footer{
@@ -132,6 +79,7 @@
 
   <div class="topbar">
     <div class="logo">MoouRBX</div>
+
     <div class="subtitle">
       Roblox Script Hub
     </div>
@@ -145,28 +93,8 @@
 
   <div class="scripts">
 
-    <div class="card">
-      <div class="title">MM2 Autofarm</div>
-
-      <div class="game">
-        Game: Murder Mystery 2
-      </div>
-
-      <div class="desc">
-        Fast coin autofarm with anti-afk and smooth farming.
-      </div>
-
-      <div class="buttons">
-        <button class="copy"
-          onclick="copyScript()">
-          Copy Script
-        </button>
-
-        <button class="video"
-          onclick="window.open('https://youtube.com')">
-          Video Proof
-        </button>
-      </div>
+    <div class="empty">
+      No scripts uploaded yet.
     </div>
 
   </div>
@@ -174,17 +102,6 @@
   <div class="footer">
     MoouRBX © 2026
   </div>
-
-  <script>
-    function copyScript(){
-
-      const script = `loadstring(game:HttpGet("https://example.com/script.lua"))()`;
-
-      navigator.clipboard.writeText(script);
-
-      alert("Script copied!");
-    }
-  </script>
 
 </body>
 </html>
