@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>MoouRBX</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial;
+    }
+
+    body{
+      background:#0b0b0f;
+      color:white;
+      padding:20px;
+    }
+
+    .topbar{
+      background:#13131a;
+      border:1px solid #26263a;
+      padding:15px;
+      border-radius:16px;
+      margin-bottom:20px;
+      box-shadow:0 0 20px rgba(111,0,255,0.25);
+    }
+
+    .logo{
+      font-size:28px;
+      font-weight:bold;
+      color:#9d5cff;
+    }
+
+    .subtitle{
+      color:#8d8d99;
+      margin-top:5px;
+    }
+
+    .search{
+      width:100%;
+      margin-top:15px;
+      padding:12px;
+      border:none;
+      outline:none;
+      border-radius:12px;
+      background:#1b1b26;
+      color:white;
+      font-size:15px;
+    }
+
+    .scripts{
+      display:flex;
+      flex-direction:column;
+      gap:15px;
+    }
+
+    .card{
+      background:#13131a;
+      border:1px solid #26263a;
+      border-radius:18px;
+      padding:18px;
+      transition:0.2s;
+    }
+
+    .card:hover{
+      transform:scale(1.01);
+      border-color:#7d4dff;
+    }
+
+    .title{
+      font-size:20px;
+      font-weight:bold;
+      color:#b78cff;
+    }
+
+    .game{
+      margin-top:5px;
+      color:#8f8fa3;
+      font-size:14px;
+    }
+
+    .desc{
+      margin-top:12px;
+      line-height:1.5;
+      color:#d1d1dc;
+    }
+
+    .buttons{
+      display:flex;
+      gap:10px;
+      margin-top:18px;
+    }
+
+    button{
+      flex:1;
+      border:none;
+      padding:12px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:bold;
+      transition:0.2s;
+    }
+
+    .copy{
+      background:#7d4dff;
+      color:white;
+    }
+
+    .video{
+      background:#1f1f2e;
+      color:white;
+      border:1px solid #31314d;
+    }
+
+    button:hover{
+      opacity:0.9;
+    }
+
+    .footer{
+      margin-top:30px;
+      text-align:center;
+      color:#6f6f80;
+      font-size:13px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="logo">MoouRBX</div>
+    <div class="subtitle">
+      Roblox Script Hub
+    </div>
+
+    <input
+      type="text"
+      class="search"
+      placeholder="Search scripts..."
+    >
+  </div>
+
+  <div class="scripts">
+
+    <div class="card">
+      <div class="title">MM2 Autofarm</div>
+
+      <div class="game">
+        Game: Murder Mystery 2
+      </div>
+
+      <div class="desc">
+        Fast coin autofarm with anti-afk and smooth farming.
+      </div>
+
+      <div class="buttons">
+        <button class="copy"
+          onclick="copyScript()">
+          Copy Script
+        </button>
+
+        <button class="video"
+          onclick="window.open('https://youtube.com')">
+          Video Proof
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    MoouRBX © 2026
+  </div>
+
+  <script>
+    function copyScript(){
+
+      const script = `loadstring(game:HttpGet("https://example.com/script.lua"))()`;
+
+      navigator.clipboard.writeText(script);
+
+      alert("Script copied!");
+    }
+  </script>
+
+</body>
+</html>
