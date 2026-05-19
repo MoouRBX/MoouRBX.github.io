@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>MoouRBX</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial;
+    }
+
+    body{
+      background:#0b0b0f;
+      color:white;
+      padding:20px;
+    }
+
+    .topbar{
+      background:#13131a;
+      border:1px solid #26263a;
+      padding:15px;
+      border-radius:16px;
+      margin-bottom:20px;
+      box-shadow:0 0 20px rgba(111,0,255,0.25);
+    }
+
+    .logo{
+      font-size:28px;
+      font-weight:bold;
+      color:#9d5cff;
+    }
+
+    .subtitle{
+      color:#8d8d99;
+      margin-top:5px;
+    }
+
+    .search{
+      width:100%;
+      margin-top:15px;
+      padding:12px;
+      border:none;
+      outline:none;
+      border-radius:12px;
+      background:#1b1b26;
+      color:white;
+      font-size:15px;
+    }
+
+    .upload-btn{
+      width:100%;
+      margin-top:15px;
+      padding:14px;
+      border:none;
+      border-radius:14px;
+      background:#7d4dff;
+      color:white;
+      font-size:16px;
+      font-weight:bold;
+      cursor:pointer;
+    }
+
+    .upload-box{
+      display:none;
+      background:#13131a;
+      border:1px solid #26263a;
+      border-radius:18px;
+      padding:20px;
+      margin-bottom:20px;
+    }
+
+    .upload-box input,
+    .upload-box textarea{
+      width:100%;
+      margin-top:12px;
+      padding:12px;
+      border:none;
+      border-radius:12px;
+      background:#1b1b26;
+      color:white;
+      resize:none;
+    }
+
+    .submit-btn{
+      width:100%;
+      margin-top:15px;
+      padding:14px;
+      border:none;
+      border-radius:14px;
+      background:#7d4dff;
+      color:white;
+      font-size:15px;
+      font-weight:bold;
+      cursor:pointer;
+    }
+
+    .scripts{
+      display:flex;
+      flex-direction:column;
+      gap:15px;
+    }
+
+    .card{
+      background:#13131a;
+      border:1px solid #26263a;
+      border-radius:18px;
+      padding:18px;
+    }
+
+    .title{
+      font-size:20px;
+      font-weight:bold;
+      color:#b78cff;
+    }
+
+    .game{
+      margin-top:6px;
+      color:#8f8fa3;
+      font-size:14px;
+    }
+
+    .desc{
+      margin-top:12px;
+      color:#d7d7e0;
+      line-height:1.5;
+    }
+
+    .buttons{
+      display:flex;
+      gap:10px;
+      margin-top:15px;
+    }
+
+    .buttons button{
+      flex:1;
+      border:none;
+      padding:12px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:bold;
+    }
+
+    .copy{
+      background:#7d4dff;
+      color:white;
+    }
+
+    .report{
+      background:#1f1f2e;
+      color:white;
+      border:1px solid #31314d;
+    }
+
+    .footer{
+      margin-top:30px;
+      text-align:center;
+      color:#6f6f80;
+      font-size:13px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+
+    <div class="logo">MoouRBX</div>
+
+    <div class="subtitle">
+      Roblox Script Hub
+    </div>
+
+    <input
+      type="text"
+      class="search"
+      placeholder="Search scripts..."
+    >
+
+    <button class="upload-btn" onclick="toggleUpload()">
+      Upload Script
+    </button>
+
+  </div>
+
+  <div class="upload-box" id="uploadBox">
+
+    <input type="text" id="title" placeholder="Script Title">
+
+    <input type="text" id="game" placeholder="Game Name">
+
+    <textarea id="script"
+      rows="6"
+      placeholder="Paste script here..."></textarea>
+
+    <input type="text"
+      id="video"
+      placeholder="Video Proof URL">
+
+    <button class="submit-btn"
+      onclick="submitScript()">
+      Submit Script
+    </button>
+
+  </div>
+
+  <div class="scripts" id="scripts">
+
+  </div>
+
+  <div class="footer">
+    MoouRBX © 2026
+  </div>
+
+  <script>
+
+    function toggleUpload(){
+
+      const box =
+      document.getElementById("uploadBox");
+
+      if(box.style.display === "block"){
+        box.style.display = "none";
+      }else{
+        box.style.display = "block";
+      }
+
+    }
+
+    function submitScript(){
+
+      const title =
+      document.getElementById("title").value;
+
+      const game =
+      document.getElementById("game").value;
+
+      const script =
+      document.getElementById("script").value;
+
+      const video =
+      document.getElementById("video").value;
+
+      if(title === "" || script === ""){
+        alert("Fill everything.");
+        return;
+      }
+
+      const card =
+      document.createElement("div");
+
+      card.className = "card";
+
+      card.innerHTML = `
+        <div class="title">${title}</div>
+
+        <div class="game">
+          Game: ${game}
+        </div>
+
+        <div class="desc">
+          Video Proof:
+          <a href="${video}"
+             target="_blank"
+             style="color:#9d5cff;">
+             Open Video
+          </a>
+        </div>
+
+        <div class="buttons">
+
+          <button class="copy"
+          onclick='copyScript(${JSON.stringify(script)})'>
+          Copy Script
+          </button>
+
+          <button class="report"
+          onclick="reportScript()">
+          Report
+          </button>
+
+        </div>
+      `;
+
+      document
+      .getElementById("scripts")
+      .prepend(card);
+
+      document.getElementById("title").value = "";
+      document.getElementById("game").value = "";
+      document.getElementById("script").value = "";
+      document.getElementById("video").value = "";
+
+    }
+
+    function copyScript(script){
+
+      navigator.clipboard.writeText(script);
+
+      alert("Script copied!");
+
+    }
+
+    function reportScript(){
+
+      alert("Script reported.");
+
+    }
+
+  </script>
+
+</body>
+</html>
