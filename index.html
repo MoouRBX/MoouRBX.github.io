@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>MoouRBX</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
+body{
+background:#0b0b0f;
+color:white;
+padding:20px;
+}
+
+.topbar{
+background:#13131a;
+border:1px solid #26263a;
+padding:15px;
+border-radius:16px;
+margin-bottom:20px;
+box-shadow:0 0 20px rgba(111,0,255,0.25);
+}
+
+.logo{
+font-size:28px;
+font-weight:bold;
+color:#9d5cff;
+}
+
+.subtitle{
+color:#8d8d99;
+margin-top:5px;
+}
+
+.search{
+width:100%;
+margin-top:15px;
+padding:12px;
+border:none;
+outline:none;
+border-radius:12px;
+background:#1b1b26;
+color:white;
+font-size:15px;
+}
+
+.upload-btn{
+width:100%;
+margin-top:15px;
+padding:14px;
+border:none;
+border-radius:14px;
+background:#7d4dff;
+color:white;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.auth-box{
+background:#13131a;
+border:1px solid #26263a;
+padding:20px;
+border-radius:18px;
+margin-bottom:20px;
+}
+
+.auth-box input{
+width:100%;
+margin-top:10px;
+padding:12px;
+border:none;
+border-radius:12px;
+background:#1b1b26;
+color:white;
+}
+
+.auth-btn{
+width:100%;
+margin-top:12px;
+padding:13px;
+border:none;
+border-radius:12px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.signup-btn{
+background:#7d4dff;
+color:white;
+}
+
+.login-btn{
+background:#1f1f2e;
+color:white;
+border:1px solid #31314d;
+}
+
+.user-display{
+margin-top:15px;
+text-align:center;
+color:#9d5cff;
+font-weight:bold;
+}
+
+.upload-box{
+display:none;
+background:#13131a;
+border:1px solid #26263a;
+border-radius:18px;
+padding:20px;
+margin-bottom:20px;
+}
+
+.upload-box input,
+.upload-box textarea{
+width:100%;
+margin-top:12px;
+padding:12px;
+border:none;
+border-radius:12px;
+background:#1b1b26;
+color:white;
+resize:none;
+}
+
+.submit-btn{
+width:100%;
+margin-top:15px;
+padding:14px;
+border:none;
+border-radius:14px;
+background:#7d4dff;
+color:white;
+font-size:15px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.scripts{
+display:flex;
+flex-direction:column;
+gap:15px;
+}
+
+.card{
+background:#13131a;
+border:1px solid #26263a;
+border-radius:18px;
+padding:18px;
+}
+
+.title{
+font-size:20px;
+font-weight:bold;
+color:#b78cff;
+}
+
+.game{
+margin-top:6px;
+color:#8f8fa3;
+font-size:14px;
+}
+
+.desc{
+margin-top:12px;
+color:#d7d7e0;
+line-height:1.5;
+word-break:break-word;
+}
+
+.buttons{
+display:flex;
+gap:10px;
+margin-top:15px;
+}
+
+.buttons button{
+flex:1;
+border:none;
+padding:12px;
+border-radius:12px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.copy{
+background:#7d4dff;
+color:white;
+}
+
+.report{
+background:#1f1f2e;
+color:white;
+border:1px solid #31314d;
+}
+
+.footer{
+margin-top:30px;
+text-align:center;
+color:#6f6f80;
+font-size:13px;
+}
+
+a{
+color:#9d5cff;
+text-decoration:none;
+}
+
+</style>
+</head>
+<body>
+
+<div class="topbar">
+
+<div class="logo">
+MoouRBX
+</div>
+
+<div class="subtitle">
+Roblox Script Hub
+</div>
+
+<input
+type="text"
+class="search"
+placeholder="Search scripts..."
+id="search"
+onkeyup="searchScripts()">
+
+<button
+class="upload-btn"
+onclick="toggleUpload()">
+Upload Script
+</button>
+
+</div>
+
+<div class="auth-box">
+
+<input
+type="email"
+id="email"
+placeholder="Email">
+
+<input
+type="password"
+id="password"
+placeholder="Password">
+
+<button
+class="auth-btn signup-btn"
+onclick="signup()">
+Sign Up
+</button>
+
+<button
+class="auth-btn login-btn"
+onclick="login()">
+Login
+</button>
+
+<div
+class="user-display"
+id="userDisplay">
+
+Not logged in
+
+</div>
+
+</div>
+
+<div
+class="upload-box"
+id="uploadBox">
+
+<input
+type="text"
+id="title"
+placeholder="Script Title">
+
+<input
+type="text"
+id="game"
+placeholder="Game Name">
+
+<textarea
+rows="6"
+id="script"
+placeholder="Paste script here..."></textarea>
+
+<input
+type="text"
+id="video"
+placeholder="Video Proof URL">
+
+<button
+class="submit-btn"
+onclick="submitScript()">
+Submit Script
+</button>
+
+</div>
+
+<div
+class="scripts"
+id="scripts">
+
+</div>
+
+<div class="footer">
+MoouRBX © 2026
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+
+import {
+getDatabase,
+ref,
+push,
+onValue
+}
+from "https://www.gstatic.com/firebasejs/12.13.0/firebase-database.js";
+
+import {
+getAuth,
+createUserWithEmailAndPassword,
+signInWithEmailAndPassword,
+onAuthStateChanged,
+signOut
+}
+from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyB8lCF0DgtTG7sSL4WrlidiFDYWajdcJ8E",
+authDomain: "moourbx.firebaseapp.com",
+databaseURL: "https://moourbx-default-rtdb.asia-southeast1.firebasedatabase.app",
+projectId: "moourbx",
+storageBucket: "moourbx.firebasestorage.app",
+messagingSenderId: "798297032764",
+appId: "1:798297032764:web:3f5902c25f88f6f3455b39"
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getDatabase(app);
+
+const auth =
+getAuth(app);
+
+let currentUser = null;
+
+window.signup = async function(){
+
+const email =
+document.getElementById("email").value;
+
+const password =
+document.getElementById("password").value;
+
+try{
+
+await createUserWithEmailAndPassword(
+auth,
+email,
+password
+);
+
+alert("Account created!");
+
+}catch(err){
+
+alert(err.message);
+
+}
+
+}
+
+window.login = async function(){
+
+const email =
+document.getElementById("email").value;
+
+const password =
+document.getElementById("password").value;
+
+try{
+
+await signInWithEmailAndPassword(
+auth,
+email,
+password
+);
+
+alert("Logged in!");
+
+}catch(err){
+
+alert(err.message);
+
+}
+
+}
+
+window.logout = async function(){
+
+await signOut(auth);
+
+}
+
+onAuthStateChanged(auth,(user)=>{
+
+const display =
+document.getElementById("userDisplay");
+
+if(user){
+
+currentUser = user;
+
+display.innerHTML = `
+Logged in as:
+<br><br>
+${user.email}
+<br><br>
+
+<button onclick="logout()"
+style="
+padding:10px;
+border:none;
+border-radius:10px;
+background:red;
+color:white;
+font-weight:bold;
+cursor:pointer;
+">
+Logout
+</button>
+`;
+
+}else{
+
+currentUser = null;
+
+display.innerHTML =
+"Not logged in";
+
+}
+
+});
+
+window.toggleUpload = function(){
+
+const box =
+document.getElementById("uploadBox");
+
+if(box.style.display === "block"){
+box.style.display = "none";
+}else{
+box.style.display = "block";
+}
+
+}
+
+window.submitScript = function(){
+
+if(!currentUser){
+
+alert("Login first.");
+return;
+
+}
+
+const title =
+document.getElementById("title").value;
+
+const game =
+document.getElementById("game").value;
+
+const script =
+document.getElementById("script").value;
+
+const video =
+document.getElementById("video").value;
+
+if(
+title === "" ||
+game === "" ||
+script === "" ||
+video === ""
+){
+alert("Fill everything.");
+return;
+}
+
+push(ref(db,"scripts"),{
+title,
+game,
+script,
+video,
+author: currentUser.email
+});
+
+document.getElementById("title").value = "";
+document.getElementById("game").value = "";
+document.getElementById("script").value = "";
+document.getElementById("video").value = "";
+
+toggleUpload();
+
+}
+
+const scriptsRef =
+ref(db,"scripts");
+
+onValue(scriptsRef,(snapshot)=>{
+
+const container =
+document.getElementById("scripts");
+
+container.innerHTML = "";
+
+const data =
+snapshot.val();
+
+if(!data){
+
+container.innerHTML = `
+<div class="card">
+No scripts uploaded yet.
+</div>
+`;
+
+return;
+
+}
+
+Object.values(data)
+.reverse()
+.forEach(scriptData=>{
+
+const card =
+document.createElement("div");
+
+card.className = "card";
+
+card.innerHTML = `
+
+<div class="title">
+${scriptData.title}
+</div>
+
+<div class="game">
+Game: ${scriptData.game}
+</div>
+
+<div class="desc">
+
+Uploaded by:
+${scriptData.author}
+
+<br><br>
+
+<a href="${scriptData.video}"
+target="_blank">
+Video Proof
+</a>
+
+</div>
+
+<div class="buttons">
+
+<button
+class="copy"
+onclick='copyScript(${JSON.stringify(scriptData.script)})'>
+Copy Script
+</button>
+
+<button
+class="report"
+onclick="reportScript()">
+Report
+</button>
+
+</div>
+
+`;
+
+container.appendChild(card);
+
+});
+
+});
+
+window.copyScript = function(script){
+
+navigator.clipboard.writeText(script);
+
+alert("Script copied!");
+
+}
+
+window.reportScript = function(){
+
+alert("Script reported.");
+
+}
+
+window.searchScripts = function(){
+
+const value =
+document.getElementById("search")
+.value
+.toLowerCase();
+
+const cards =
+document.querySelectorAll(".card");
+
+cards.forEach(card=>{
+
+if(
+card.innerText
+.toLowerCase()
+.includes(value)
+){
+card.style.display = "block";
+}else{
+card.style.display = "none";
+}
+
+});
+
+}
+
+</script>
+
+</body>
+</html>
