@@ -1,6 +1,6 @@
-# MoouRBX
+# ScriptsRBLX
 
-MoouRBX is a Roblox script hub where users can upload and share Roblox scripts with video proof.
+ScriptsRBLX is a Roblox script hub where users can upload and share Roblox scripts with video proof.
 
 ## Features
 
