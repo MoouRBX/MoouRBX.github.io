@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ScriptsRBLX Admin</title>
+
+<style>
+
+body{
+background:#0b0b0f;
+color:white;
+font-family:Arial;
+padding:20px;
+}
+
+.panel{
+background:#13131a;
+border:1px solid #26263a;
+border-radius:18px;
+padding:20px;
+}
+
+.title{
+font-size:32px;
+color:#9d5cff;
+font-weight:bold;
+margin-bottom:10px;
+}
+
+.subtitle{
+color:#888;
+margin-bottom:20px;
+}
+
+.card{
+background:#1b1b26;
+border:1px solid #2c2c44;
+border-radius:16px;
+padding:15px;
+margin-top:15px;
+}
+
+button{
+width:100%;
+padding:12px;
+margin-top:10px;
+border:none;
+border-radius:12px;
+background:#7d4dff;
+color:white;
+font-weight:bold;
+cursor:pointer;
+}
+
+.delete{
+background:#ff3d5a;
+}
+
+</style>
+</head>
+<body>
+
+<div class="panel">
+
+<div class="title">
+ScriptsRBLX Admin
+</div>
+
+<div class="subtitle">
+Moderator Panel
+</div>
+
+<div id="adminInfo">
+Checking permissions...
+</div>
+
+<div id="scriptsContainer"></div>
+
+<button onclick="logout()">
+Logout
+</button>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+
+import {
+getDatabase,
+ref,
+onValue,
+remove
+}
+from "https://www.gstatic.com/firebasejs/12.13.0/firebase-database.js";
+
+import {
+getAuth,
+onAuthStateChanged,
+signOut
+}
+from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+
+const firebaseConfig = {
+
+apiKey:"YOUR_API_KEY",
+authDomain:"YOUR_AUTH_DOMAIN",
+databaseURL:"YOUR_DATABASE_URL",
+projectId:"YOUR_PROJECT_ID",
+storageBucket:"YOUR_STORAGE_BUCKET",
+messagingSenderId:"YOUR_SENDER_ID",
+appId:"YOUR_APP_ID"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getDatabase(app);
+
+const auth =
+getAuth(app);
+
+const adminEmails = [
+
+"kornc2008@gmail.com"
+
+];
+
+window.logout = async function(){
+
+await signOut(auth);
+
+location.reload();
+
+}
+
+onAuthStateChanged(auth,(user)=>{
+
+if(!user){
+
+document.body.innerHTML =
+"<h1>Login required.</h1>";
+
+return;
+
+}
+
+if(!adminEmails.includes(user.email)){
+
+document.body.innerHTML =
+"<h1>Access denied.</h1>";
+
+return;
+
+}
+
+adminInfo.innerHTML =
+`Logged in as:<br><br>${user.email}`;
+
+loadScripts();
+
+});
+
+function loadScripts(){
+
+onValue(ref(db,"scripts"),(snapshot)=>{
+
+const data =
+snapshot.val();
+
+scriptsContainer.innerHTML = "";
+
+if(!data){
+
+scriptsContainer.innerHTML =
+"<div class='card'>No scripts.</div>";
+
+return;
+
+}
+
+Object.entries(data)
+.reverse()
+.forEach(([key,script])=>{
+
+scriptsContainer.innerHTML += `
+
+<div class="card">
+
+<h2>${script.title}</h2>
+
+<p>Game: ${script.game}</p>
+
+<p>Category: ${script.category}</p>
+
+<p>Uploader: ${script.owner}</p>
+
+<button onclick='copyScript(${JSON.stringify(script.script)})'>
+Copy Script
+</button>
+
+<button class="delete"
+onclick="deleteScript('${key}')">
+Delete Script
+</button>
+
+</div>
+
+`;
+
+});
+
+});
+
+}
+
+window.copyScript = function(script){
+
+navigator.clipboard.writeText(script);
+
+alert("Copied.");
+
+}
+
+window.deleteScript = async function(key){
+
+const confirmDelete =
+confirm("Delete script?");
+
+if(!confirmDelete) return;
+
+await remove(
+ref(db,"scripts/" + key)
+);
+
+alert("Deleted.");
+
+}
+
+</script>
+</body>
+</html>
