@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>ScriptsRBLX Profile</title>
+
+<style>
+
+body{
+background:#0b0b0f;
+color:white;
+font-family:Arial;
+padding:20px;
+}
+
+.profile{
+background:#13131a;
+border:1px solid #26263a;
+border-radius:18px;
+padding:20px;
+box-shadow:0 0 20px rgba(111,0,255,0.25);
+margin-bottom:20px;
+}
+
+.username{
+font-size:32px;
+font-weight:bold;
+color:#9d5cff;
+}
+
+.bio{
+margin-top:10px;
+color:#999;
+}
+
+.stats{
+margin-top:15px;
+color:#ccc;
+}
+
+.card{
+background:#1b1b26;
+border:1px solid #2c2c44;
+border-radius:16px;
+padding:15px;
+margin-top:15px;
+}
+
+.title{
+font-size:22px;
+font-weight:bold;
+color:#b78cff;
+}
+
+.game{
+margin-top:8px;
+color:#8d8d99;
+}
+
+button{
+width:100%;
+padding:12px;
+margin-top:10px;
+border:none;
+border-radius:12px;
+background:#7d4dff;
+color:white;
+font-weight:bold;
+cursor:pointer;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="profile">
+
+<div class="username"
+id="username">
+Loading...
+</div>
+
+<div class="bio">
+ScriptsRBLX User
+</div>
+
+<div class="stats"
+id="stats">
+Loading stats...
+</div>
+
+</div>
+
+<div id="scriptsContainer"></div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+
+import {
+getDatabase,
+ref,
+onValue
+}
+from "https://www.gstatic.com/firebasejs/12.13.0/firebase-database.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyB8lCF0DgtTG7sSL4WrlidiFDYWajdcJ8E",
+authDomain: "moourbx.firebaseapp.com",
+databaseURL: "https://moourbx-default-rtdb.asia-southeast1.firebasedatabase.app",
+projectId: "moourbx",
+storageBucket: "moourbx.firebasestorage.app",
+messagingSenderId: "798297032764",
+appId: "1:798297032764:web:3f5902c25f88f6f3455b39"
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getDatabase(app);
+
+const params =
+new URLSearchParams(window.location.search);
+
+const username =
+params.get("user");
+
+document.getElementById("username")
+.innerText =
+"@" + username;
+
+onValue(ref(db,"scripts"),(snapshot)=>{
+
+const data =
+snapshot.val();
+
+const container =
+document.getElementById("scriptsContainer");
+
+container.innerHTML = "";
+
+let count = 0;
+
+if(!data){
+
+document.getElementById("stats")
+.innerHTML =
+"No uploads.";
+
+return;
+
+}
+
+Object.entries(data)
+.reverse()
+.forEach(([key,script])=>{
+
+if(
+script.owner &&
+script.owner
+.toLowerCase()
+.includes(username.toLowerCase())
+){
+
+count++;
+
+container.innerHTML += `
+
+<div class="card">
+
+<div class="title">
+${script.title}
+</div>
+
+<div class="game">
+Game: ${script.game}
+</div>
+
+<button onclick='copyScript(${JSON.stringify(script.script)})'>
+Copy Script
+</button>
+
+</div>
+
+`;
+
+}
+
+});
+
+document.getElementById("stats")
+.innerHTML =
+`
+Uploads: ${count}
+`;
+
+});
+
+window.copyScript = function(script){
+
+navigator.clipboard.writeText(script);
+
+alert("Copied.");
+
+}
+
+</script>
+
+</body>
+</html>
